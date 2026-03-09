@@ -1,37 +1,4 @@
 ```mermaid
-graph TD
-    HN["Hacker News API"] -->|stories| WF["Elastic Workflow"]
-    WF -->|index documents| ES["Elasticsearch Index"]
-    ES -->|auto-embed via| EIS["EIS (Jina v3)"]
-    WF -->|invoke| Agent["AI Agent"]
-    Agent -->|search| ES
-```
-
-```mermaid
-graph TD
-    subgraph "Typical setup"
-        A["Embedding API
-         (OpenAI, Cohere)"]
-        B["Vector Database
-        (Pinecone, Weaviate)"]
-        D["LLM Orchestrator
-        (LangChain, LlamaIndex)"]
-        E["Scheduler
-        (Airflow, cron)"]
-    end
-
-    subgraph "Elasticsearch"
-        F["Managed Inference"]
-        G["Semantic + BM25 Index"]
-        H["Hybrid Retrieval"]
-        I["AI Agent"]
-        J["Workflows"]
-    end
-```
-
-
-
-```mermaid
 graph LR
     subgraph "Elastic Workflow"
         S1["1. GET /topstories.json"]
@@ -42,14 +9,25 @@ graph LR
     end
 
     HN["Hacker News API"]
-    ES["Elasticsearch Index"]
-    EIS["EIS (Jina v5)"]
+    ES["Elasticsearch Index/EIS create embeddings"]
     Agent["AI Agent"]
 
     S1 -->|story IDs| HN
     S2 -->|story details| HN
-    S3 -->|index| ES
-    ES -.->|auto-embed| EIS
+    S3 -->|index and embed| ES
     S4 -->|invoke| Agent
     Agent -->|search| ES
 ```
+
+```mermaid
+graph TD
+    DS["Data Source"] -->|raw data| WF["Elastic Workflows"]
+    WF -->|index and embed| ES["Elasticsearch Index
+    (Semantic + BM25)
+    Using EIS"]
+    ES -->|data ready| Agent["AI Agent
+    (Agent Builder)"]
+    Agent -->|query via
+    hybrid retrieval| ES
+```
+
