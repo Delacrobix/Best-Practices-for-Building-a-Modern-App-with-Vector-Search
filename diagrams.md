@@ -9,7 +9,8 @@ graph LR
     end
 
     HN["Hacker News API"]
-    ES["Elasticsearch Index/EIS create embeddings"]
+    ES["Elasticsearch Index
+    EIS create embeddings"]
     Agent["AI Agent"]
 
     S1 -->|story IDs| HN
